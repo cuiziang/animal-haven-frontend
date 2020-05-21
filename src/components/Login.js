@@ -42,14 +42,13 @@ export function Login() {
 
     return (
         <Container maxWidth="sm">
-            <form>
+            <form onSubmit={toLogin}>
                 <Typography variant="h4" style={styles.notification}></Typography>
                 <TextField type="text" label="Username" fullWidth margin="normal" name="username"
                            onChange={handleUsernameChange}/>
                 <TextField type="password" label="Password" fullWidth margin="normal" name="password"
                            onChange={handlePasswordChange} autoComplete="off"/>
-                <Button variant="contained" size="large" color="primary" onClick={toLogin}
-                        onSubmit={toLogin}>Login</Button>
+                <Button type="submit" variant="contained" size="large" color="primary">Login</Button>
             </form>
         </Container>
     )
