@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import MuiAlert from '@material-ui/lab/Alert';
 import Container from '@material-ui/core/Container';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {login} from "../features/users/usersSlice";
 import {useHistory, useLocation} from 'react-router-dom';
 
@@ -22,6 +22,11 @@ export function Login() {
             color: '#dc3545'
         }
     }
+
+    const loggedIn = useSelector(state => state.users.loggedIn);
+    const [warning, setWarning] = useState();
+    const [showHideAlert, setShowHideAlert] = useState();
+
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
 
@@ -30,10 +35,21 @@ export function Login() {
     const dispatch = useDispatch()
     const {from} = location.state || {from: {pathname: "/"}}
 
-    const toLogin = (e) => {
+    function Alert(props) {
+        return <MuiAlert elevation={6} variant="filled" {...props} />;
+    }
+
+    const toLogin = async (e) => {
         e.preventDefault();
-        dispatch(login({username, password}))
-            .then(() => history.replace(from));
+        dispatch(await login({username, password}))
+            .then(() => {
+                if (loggedIn)
+                    history.replace(from)
+                else {
+                    setShowHideAlert(true);
+                    setWarning("Wrong username or password");
+                }
+            });
     };
 
     const handleUsernameChange = (e) => setUsername({[e.target.name]: e.target.value});
@@ -43,7 +59,7 @@ export function Login() {
     return (
         <Container maxWidth="sm">
             <form onSubmit={toLogin}>
-                <Typography variant="h4" style={styles.notification}></Typography>
+                {showHideAlert && <Alert severity="error">{warning}</Alert>}
                 <TextField type="text" label="Username" fullWidth margin="normal" name="username"
                            onChange={handleUsernameChange}/>
                 <TextField type="password" label="Password" fullWidth margin="normal" name="password"
