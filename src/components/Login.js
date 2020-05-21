@@ -1,0 +1,56 @@
+import React, {useState} from 'react';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import {useDispatch} from 'react-redux';
+import {login} from "../features/users/usersSlice";
+import {useHistory, useLocation} from 'react-router-dom';
+
+
+export function Login() {
+
+    const styles = {
+        center: {
+            display: 'flex',
+            justifyContent: 'center'
+
+        },
+        notification: {
+            display: 'flex',
+            justifyContent: 'center',
+            color: '#dc3545'
+        }
+    }
+    const [username, setUsername] = useState();
+    const [password, setPassword] = useState();
+
+    const location = useLocation();
+    const history = useHistory();
+    const dispatch = useDispatch()
+    const {from} = location.state || {from: {pathname: "/"}}
+
+    const toLogin = (e) => {
+        e.preventDefault();
+        dispatch(login({username, password}))
+            .then(() => history.replace(from));
+    };
+
+    const handleUsernameChange = (e) => setUsername({[e.target.name]: e.target.value});
+    const handlePasswordChange = (e) => setPassword({[e.target.name]: e.target.value});
+
+
+    return (
+        <Container maxWidth="sm">
+            <form>
+                <Typography variant="h4" style={styles.notification}></Typography>
+                <TextField type="text" label="Username" fullWidth margin="normal" name="username"
+                           onChange={handleUsernameChange}/>
+                <TextField type="password" label="Password" fullWidth margin="normal" name="password"
+                           onChange={handlePasswordChange} autoComplete="off"/>
+                <Button variant="contained" size="large" color="primary" onClick={toLogin}
+                        onSubmit={toLogin}>Login</Button>
+            </form>
+        </Container>
+    )
+}
