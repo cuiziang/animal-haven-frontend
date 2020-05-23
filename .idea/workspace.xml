@@ -11,6 +11,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1aec477b-b97c-4522-acfc-94dec1424d0a" name="Default Changelist" comment="Initial commit">
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cloudbuild.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
@@ -49,14 +51,49 @@
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src/features" />
       <recent name="$PROJECT_DIR$/src/features/animal" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/components" />
-    </key>
+  </component>
+  <component name="RunManager" selected="Docker.Docker Image">
+    <configuration name="Docker Image" type="docker-deploy" factoryName="docker-image" temporary="true" server-name="Docker">
+      <deployment type="docker-image">
+        <settings>
+          <option name="imageTag" value="sha256:5a3958b9e4b273c84be11765441d2597743e161c5269e773cdb5cd13b35042cb" />
+          <option name="command" value="" />
+          <option name="containerName" value="" />
+          <option name="entrypoint" value="" />
+          <option name="commandLineOptions" value="" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="imageTag" value="" />
+          <option name="buildCliOptions" value="" />
+          <option name="command" value="" />
+          <option name="containerName" value="" />
+          <option name="entrypoint" value="" />
+          <option name="commandLineOptions" value="" />
+          <option name="sourceFilePath" value="Dockerfile" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Docker.Docker Image" />
+        <item itemvalue="Docker.Dockerfile" />
+        <item itemvalue="Docker.Docker Image" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -74,6 +111,8 @@
       <workItem from="1589997589273" duration="1153000" />
       <workItem from="1590042496725" duration="3099000" />
       <workItem from="1590045948072" duration="4265000" />
+      <workItem from="1590172899004" duration="412000" />
+      <workItem from="1590204638655" duration="1904000" />
     </task>
     <servers />
   </component>
@@ -90,12 +129,29 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
     <option name="LAST_COMMIT_MESSAGE" value="Initial commit" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="582" y="232" key="#Docker_Image" timestamp="1590205435148">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state x="582" y="232" key="#Docker_Image/0.23.1792.1097@0.23.1792.1097" timestamp="1590205435148" />
+    <state x="582" y="129" key="#Dockerfile" timestamp="1590089963023">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state x="582" y="129" key="#Dockerfile/0.23.1792.1097@0.23.1792.1097" timestamp="1590089963023" />
+    <state x="752" y="456" key="#Port_bindings" timestamp="1590205243913">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state x="752" y="456" key="#Port_bindings/0.23.1792.1097@0.23.1792.1097" timestamp="1590205243913" />
+    <state x="360" y="253" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1590204912746">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state x="360" y="253" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1792.1097@0.23.1792.1097" timestamp="1590204912746" />
     <state x="631" y="400" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1590045842166">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>

@@ -35,9 +35,7 @@ export function Login() {
     const dispatch = useDispatch()
     const {from} = location.state || {from: {pathname: "/"}}
 
-    function Alert(props) {
-        return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    const Alert = props => <MuiAlert elevation={6} variant="filled" {...props} />;
 
     const toLogin = async (e) => {
         e.preventDefault();
