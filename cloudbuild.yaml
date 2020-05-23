@@ -12,7 +12,7 @@ steps:
       - 'deploy'
       - 'animal-haven-frontend'
       - '--image'
-      - 'gcr.io/$PROJECT_ID/animal-haven-frontend'
+      - 'gcr.io/$PROJECT_ID/animal-haven-frontend:$COMMIT_SHA'
       - '--region'
       - 'us-central1'
       - '--platform'
