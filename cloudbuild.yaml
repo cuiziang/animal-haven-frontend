@@ -19,4 +19,4 @@ steps:
       - 'managed'
       - '--allow-unauthenticated'
 images:
-  - gcr.io/$PROJECT_ID/animal-haven-frontend:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/animal-frontend:$COMMIT_SHA'
