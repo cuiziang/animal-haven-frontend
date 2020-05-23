@@ -11,6 +11,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1aec477b-b97c-4522-acfc-94dec1424d0a" name="Default Changelist" comment="Initial commit">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cloudbuild.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/cloudbuild.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -107,7 +108,7 @@
       <workItem from="1590042496725" duration="3099000" />
       <workItem from="1590045948072" duration="4265000" />
       <workItem from="1590172899004" duration="412000" />
-      <workItem from="1590204638655" duration="3273000" />
+      <workItem from="1590204638655" duration="3723000" />
     </task>
     <servers />
   </component>
