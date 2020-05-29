@@ -10,9 +10,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1aec477b-b97c-4522-acfc-94dec1424d0a" name="Default Changelist" comment="Initial commit">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="1aec477b-b97c-4522-acfc-94dec1424d0a" name="Default Changelist" comment="Initial commit" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -59,10 +57,18 @@
     <configuration name="Docker Image" type="docker-deploy" factoryName="docker-image" temporary="true" server-name="Docker">
       <deployment type="docker-image">
         <settings>
-          <option name="imageTag" value="sha256:5a3958b9e4b273c84be11765441d2597743e161c5269e773cdb5cd13b35042cb" />
+          <option name="imageTag" value="react-docker:latest" />
           <option name="command" value="" />
           <option name="containerName" value="" />
           <option name="entrypoint" value="" />
+          <option name="portBindings">
+            <list>
+              <DockerPortBindingImpl>
+                <option name="containerPort" value="3000" />
+                <option name="hostPort" value="80" />
+              </DockerPortBindingImpl>
+            </list>
+          </option>
           <option name="commandLineOptions" value="" />
         </settings>
       </deployment>
@@ -84,6 +90,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.Docker Image" />
         <item itemvalue="Docker.Docker Image" />
         <item itemvalue="Docker.Dockerfile" />
         <item itemvalue="Docker.Docker Image" />
@@ -131,10 +138,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="Initial commit" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="582" y="232" key="#Docker_Image" timestamp="1590205435148">
+    <state x="582" y="232" key="#Docker_Image" timestamp="1590712806430">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
-    <state x="582" y="232" key="#Docker_Image/0.23.1792.1097@0.23.1792.1097" timestamp="1590205435148" />
+    <state x="582" y="232" key="#Docker_Image/0.23.1792.1097@0.23.1792.1097" timestamp="1590712806430" />
     <state x="582" y="129" key="#Dockerfile" timestamp="1590089963023">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
@@ -163,6 +170,10 @@
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
     <state x="650" y="301" key="RollbackChangesDialog/0.23.1792.1097@0.23.1792.1097" timestamp="1590045863885" />
+    <state x="803" y="482" width="572" height="273" key="com.intellij.docker.deployment.ui.DockerPortBindingsField.v173.dialogSize" timestamp="1590712804498">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state x="803" y="482" width="572" height="273" key="com.intellij.docker.deployment.ui.DockerPortBindingsField.v173.dialogSize/0.23.1792.1097@0.23.1792.1097" timestamp="1590712804498" />
     <state x="597" y="204" width="598" height="735" key="find.popup" timestamp="1589472929800">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
