@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import MuiAlert from '@material-ui/lab/Alert';
 import Container from '@material-ui/core/Container';
-import {useDispatch, useSelector} from 'react-redux';
-import {login} from "../features/users/usersSlice";
-import {useHistory, useLocation} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from "../features/users/usersSlice";
+import { useHistory, useLocation } from 'react-router-dom';
 
 
 export function Login() {
-    
+
     const loggedIn = useSelector(state => state.users.loggedIn);
     const [warning, setWarning] = useState();
     const [showHideAlert, setShowHideAlert] = useState();
@@ -20,35 +20,38 @@ export function Login() {
     const location = useLocation();
     const history = useHistory();
     const dispatch = useDispatch()
-    const {from} = location.state || {from: {pathname: "/"}}
+    const { from } = location.state || { from: { pathname: "/" } }
 
     const Alert = props => <MuiAlert elevation={6} variant="filled" {...props} />;
 
-    const toLogin = async (e) => {
+    useEffect(() => {
+        if (loggedIn)
+            history.push(from);
+        else {
+            setShowHideAlert(true);
+            setWarning("Wrong username or password");
+        }
+    }, [loggedIn, history, from]);
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(await login({username, password}))
-            .then(() => {
-                if (loggedIn)
-                    history.replace(from)
-                else {
-                    setShowHideAlert(true);
-                    setWarning("Wrong username or password");
-                }
-            });
+
+        dispatch(login({ username, password }));
+
     };
 
-    const handleUsernameChange = (e) => setUsername({[e.target.name]: e.target.value});
-    const handlePasswordChange = (e) => setPassword({[e.target.name]: e.target.value});
+    const handleUsernameChange = (e) => setUsername({ [e.target.name]: e.target.value });
+    const handlePasswordChange = (e) => setPassword({ [e.target.name]: e.target.value });
 
 
     return (
         <Container maxWidth="sm">
-            <form onSubmit={toLogin}>
-                {showHideAlert && <Alert severity="error">{warning}</Alert>}
+            {showHideAlert && <Alert severity="error">{warning}</Alert>}
+            <form onSubmit={handleSubmit}>
                 <TextField type="text" label="Username" fullWidth margin="normal" name="username"
-                           onChange={handleUsernameChange}/>
+                    onChange={handleUsernameChange} />
                 <TextField type="password" label="Password" fullWidth margin="normal" name="password"
-                           onChange={handlePasswordChange} autoComplete="off"/>
+                    onChange={handlePasswordChange} autoComplete="off" />
                 <Button type="submit" variant="contained" size="large" color="primary">Login</Button>
             </form>
         </Container>
