@@ -11,10 +11,10 @@ import { useHistory, useLocation } from 'react-router-dom';
 export function Login() {
 
     const loggedIn = useSelector(state => state.users.loggedIn);
+    const [tried, setTried] = useState();
     const [warning, setWarning] = useState();
     const [showHideAlert, setShowHideAlert] = useState();
-
-    const [username, setUsername] = useState();
+    const [username, setUsername] = useState(false);
     const [password, setPassword] = useState();
 
     const location = useLocation();
@@ -27,15 +27,16 @@ export function Login() {
     useEffect(() => {
         if (loggedIn)
             history.push(from);
-        else {
+        else if (tried) {
             setShowHideAlert(true);
             setWarning("Wrong username or password");
         }
-    }, [loggedIn, history, from]);
+    }, [loggedIn, history, from, tried]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        setTried(true);
         dispatch(login({ username, password }));
 
     };
