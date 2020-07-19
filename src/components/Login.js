@@ -11,6 +11,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 export function Login() {
 
     const loggedIn = useSelector(state => state.users.loggedIn);
+    const isLoading = useSelector(state => state.users.isLoading);
     const [tried, setTried] = useState();
     const [warning, setWarning] = useState();
     const [showHideAlert, setShowHideAlert] = useState();
@@ -27,17 +28,17 @@ export function Login() {
     useEffect(() => {
         if (loggedIn)
             history.push(from);
-        else if (tried) {
+        else if (tried && !isLoading) {
             setShowHideAlert(true);
             setWarning("Wrong username or password");
         }
-    }, [loggedIn, history, from, tried]);
+    }, [loggedIn, history, from, tried, isLoading]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        setTried(true);
         dispatch(login({ username, password }));
+        setTried(true);
 
     };
 
