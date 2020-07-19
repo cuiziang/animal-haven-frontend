@@ -9,20 +9,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 
 
 export function Login() {
-
-    const styles = {
-        center: {
-            display: 'flex',
-            justifyContent: 'center'
-
-        },
-        notification: {
-            display: 'flex',
-            justifyContent: 'center',
-            color: '#dc3545'
-        }
-    }
-
+    
     const loggedIn = useSelector(state => state.users.loggedIn);
     const [warning, setWarning] = useState();
     const [showHideAlert, setShowHideAlert] = useState();

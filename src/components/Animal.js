@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import {lighten, makeStyles} from '@material-ui/core/styles';
+import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -18,8 +18,9 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import {useDispatch, useSelector} from "react-redux";
-import {fetchAllAnimals} from "../features/animals/animalsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllAnimals } from "../features/animals/animalsSlice";
+import { Button, ButtonGroup } from '@material-ui/core';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -48,14 +49,14 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-    {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
-    {id: 'sex', numeric: false, disablePadding: false, label: 'Sex'},
-    {id: 'birthDate', numeric: false, disablePadding: false, label: 'BirthDate'},
-    {id: 'alterationStatus', numeric: false, disablePadding: false, label: 'Alteration'},
+    { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
+    { id: 'sex', numeric: false, disablePadding: false, label: 'Sex' },
+    { id: 'birthDate', numeric: false, disablePadding: false, label: 'BirthDate' },
+    { id: 'alterationStatus', numeric: false, disablePadding: false, label: 'Alteration' },
 ];
 
 function EnhancedTableHead(props) {
-    const {classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort} = props;
+    const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -68,7 +69,7 @@ function EnhancedTableHead(props) {
                         indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}
-                        inputProps={{'aria-label': 'select all desserts'}}
+                        inputProps={{ 'aria-label': 'select all desserts' }}
                     />
                 </TableCell>
                 {headCells.map((headCell) => (
@@ -129,7 +130,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const {numSelected} = props;
+    const { numSelected } = props;
 
     return (
         <Toolbar
@@ -142,24 +143,24 @@ const EnhancedTableToolbar = (props) => {
                     {numSelected} selected
                 </Typography>
             ) : (
-                <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-                    Animals
-                </Typography>
-            )}
+                    <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+                        Animals
+                    </Typography>
+                )}
 
             {numSelected > 0 ? (
                 <Tooltip title="Delete">
                     <IconButton aria-label="delete">
-                        <DeleteIcon/>
+                        <DeleteIcon />
                     </IconButton>
                 </Tooltip>
             ) : (
-                <Tooltip title="Filter list">
-                    <IconButton aria-label="filter list">
-                        <FilterListIcon/>
-                    </IconButton>
-                </Tooltip>
-            )}
+                    <Tooltip title="Filter list">
+                        <IconButton aria-label="filter list">
+                            <FilterListIcon />
+                        </IconButton>
+                    </Tooltip>
+                )}
         </Toolbar>
     );
 };
@@ -171,6 +172,10 @@ EnhancedTableToolbar.propTypes = {
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+    },
+    button: {
+        margin: '20px',
+        float: 'left'
     },
     paper: {
         width: '100%',
@@ -189,7 +194,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         top: 20,
         width: 1,
-    },
+    }
 }));
 
 export function Animal() {
@@ -263,7 +268,7 @@ export function Animal() {
         return (
             <div className={classes.root}>
                 <Paper className={classes.paper}>
-                    <EnhancedTableToolbar numSelected={selected.length}/>
+                    <EnhancedTableToolbar numSelected={selected.length} />
                     <TableContainer>
                         <Table
                             className={classes.table}
@@ -304,7 +309,7 @@ export function Animal() {
                                                 <TableCell padding="checkbox">
                                                     <Checkbox
                                                         checked={isItemSelected}
-                                                        inputProps={{'aria-labelledby': labelId}}
+                                                        inputProps={{ 'aria-labelledby': labelId }}
                                                     />
                                                 </TableCell>
                                                 <TableCell component="th" id={labelId} scope="row" padding="none">
@@ -318,8 +323,8 @@ export function Animal() {
                                         );
                                     })}
                                 {emptyRows > 0 && (
-                                    <TableRow style={{height: (dense ? 33 : 53) * emptyRows}}>
-                                        <TableCell colSpan={6}/>
+                                    <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                                        <TableCell colSpan={6} />
                                     </TableRow>
                                 )}
                             </TableBody>
@@ -334,11 +339,14 @@ export function Animal() {
                         onChangePage={handleChangePage}
                         onChangeRowsPerPage={handleChangeRowsPerPage}
                     />
+                    <ButtonGroup>
+                        <Button className={classes.button} variant="contained" color="primary" >Add Animal</Button>
+                    </ButtonGroup>
                 </Paper>
             </div>
         );
     else
         return (
-            <div/>
+            <div />
         );
 }
