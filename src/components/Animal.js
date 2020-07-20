@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -21,6 +21,8 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllAnimals } from "../features/animals/animalsSlice";
 import { Button, ButtonGroup } from '@material-ui/core';
+import { AddAnimal } from './AddAnimal'
+
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -51,7 +53,7 @@ function stableSort(array, comparator) {
 const headCells = [
     { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
     { id: 'sex', numeric: false, disablePadding: false, label: 'Sex' },
-    { id: 'birthDate', numeric: false, disablePadding: false, label: 'BirthDate' },
+    { id: 'birthDate', numeric: false, disablePadding: false, label: 'Birth Date' },
     { id: 'alterationStatus', numeric: false, disablePadding: false, label: 'Alteration' },
 ];
 
@@ -174,7 +176,7 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
     },
     button: {
-        margin: '20px',
+        margin: '20 px',
         float: 'left'
     },
     paper: {
@@ -183,6 +185,14 @@ const useStyles = makeStyles((theme) => ({
     },
     table: {
         minWidth: 750,
+    },
+    form: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        '& .MuiTextField-root': {
+            margin: theme.spacing(2),
+        },
     },
     visuallyHidden: {
         border: 0,
@@ -207,14 +217,15 @@ export function Animal() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-
     const classes = useStyles();
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
-    const [selected, setSelected] = React.useState([]);
-    const [page, setPage] = React.useState(0);
-    const [dense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [order, setOrder] = useState('asc');
+    const [orderBy, setOrderBy] = useState('calories');
+    const [selected, setSelected] = useState([]);
+    const [page, setPage] = useState(0);
+    const [dense] = useState(false);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [open, setOpen] = useState(false);
+
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -258,6 +269,10 @@ export function Animal() {
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
+    };
+
+    const handleOpen = () => {
+        setOpen(true);
     };
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
@@ -312,13 +327,10 @@ export function Animal() {
                                                         inputProps={{ 'aria-labelledby': labelId }}
                                                     />
                                                 </TableCell>
-                                                <TableCell component="th" id={labelId} scope="row" padding="none">
-                                                    {row.id}
-                                                </TableCell>
-                                                <TableCell align="right">{row.name}</TableCell>
-                                                <TableCell align="right">{row.sex}</TableCell>
-                                                <TableCell align="right">{d.toDateString()}</TableCell>
-                                                <TableCell align="right">{row.alterationStatus}</TableCell>
+                                                <TableCell align="left">{row.name}</TableCell>
+                                                <TableCell align="left">{row.sex}</TableCell>
+                                                <TableCell align="left">{d.toDateString()}</TableCell>
+                                                <TableCell align="left">{row.alterationStatus?'Yes':'No'}</TableCell>
                                             </TableRow>
                                         );
                                     })}
@@ -340,9 +352,17 @@ export function Animal() {
                         onChangeRowsPerPage={handleChangeRowsPerPage}
                     />
                     <ButtonGroup>
-                        <Button className={classes.button} variant="contained" color="primary" >Add Animal</Button>
+                        <Button
+                            className={classes.button}
+                            onClick={handleOpen}
+                            variant="contained"
+                            color="primary"
+                        >
+                            Add Animal
+                        </Button>
                     </ButtonGroup>
                 </Paper>
+                <AddAnimal open={open} setOpen={setOpen} />
             </div>
         );
     else
