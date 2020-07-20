@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Modal, FormControl, FormLabel, TextField, Button, RadioGroup, Radio, FormControlLabel, makeStyles } from '@material-ui/core';
 import { useFormik } from 'formik';
 import SaveIcon from '@material-ui/icons/Save';
+import { useDispatch } from 'react-redux';
+import { addAnimal } from '../features/animals/animalsSlice';
 
 function rand() {
     return Math.round(Math.random() * 20) - 10;
@@ -51,6 +53,8 @@ const useStyles = makeStyles((theme) => ({
 export function AddAnimal(props) {
     const [modalStyle] = useState(getModalStyle);
     const classes = useStyles();
+    const dispatch = useDispatch();
+
 
 
     const formik = useFormik({
@@ -58,12 +62,17 @@ export function AddAnimal(props) {
             name: '',
             sex: '',
             alteration: '',
-            birthDate: '',
+            description: '',
+            birthDate: '1970-01-01',
             surrenderedByAnimalControl: '',
+            surrenderDate: '1970-01-01',
+            surrenderReason: '',
             microchipId: ''
         },
         onSubmit: values => {
             props.setOpen(false);
+            dispatch(addAnimal(values));
+            formik.resetForm();
         }
     });
 
@@ -159,6 +168,8 @@ export function AddAnimal(props) {
                             multiline
                             rows={4}
                             variant="outlined"
+                            onChange={formik.handleChange}
+                            value={formik.values.description}
                         />
                     </FormControl>
                     <FormControl component="fieldset">
@@ -190,12 +201,15 @@ export function AddAnimal(props) {
                             multiline
                             rows={4}
                             variant="outlined"
+                            onChange={formik.handleChange}
+                            value={formik.values.surrenderReason}
                         />
                     </FormControl>
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Surrender Date</FormLabel>
                         <TextField
-                            id="surrenderDate<"
+                            id="surrenderDate"
+                            name="surrenderDate"
                             type="date"
                             onChange={formik.handleChange}
                             value={formik.values.surrenderDate}
@@ -215,6 +229,15 @@ export function AddAnimal(props) {
                         />
                     </FormControl>
                     <Button
+                        onClick={formik.resetForm}
+                        variant="contained"
+                        type="button"
+                        className={classes.button}
+                        startIcon={<SaveIcon />}
+                    >
+                        Reset
+                                </Button>
+                    <Button
                         variant="contained"
                         color="primary"
                         type="submit"
@@ -225,6 +248,6 @@ export function AddAnimal(props) {
                                 </Button>
                 </form>
             </div>
-        </Modal>
+        </Modal >
     )
 }

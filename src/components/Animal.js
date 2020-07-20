@@ -279,6 +279,10 @@ export function Animal() {
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, animals.length - page * rowsPerPage);
 
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     if (loggedIn)
         return (
             <div className={classes.root}>
@@ -327,10 +331,10 @@ export function Animal() {
                                                         inputProps={{ 'aria-labelledby': labelId }}
                                                     />
                                                 </TableCell>
-                                                <TableCell align="left">{row.name}</TableCell>
+                                                <TableCell align="left">{capitalizeFirstLetter(row.name)}</TableCell>
                                                 <TableCell align="left">{row.sex}</TableCell>
                                                 <TableCell align="left">{d.toDateString()}</TableCell>
-                                                <TableCell align="left">{row.alterationStatus?'Yes':'No'}</TableCell>
+                                                <TableCell align="left">{row.alterationStatus ? 'Yes' : 'No'}</TableCell>
                                             </TableRow>
                                         );
                                     })}
