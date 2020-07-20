@@ -1,33 +1,36 @@
 import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import {useDispatch} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Container from "@material-ui/core/Container";
-import {Animal} from "./Animal";
-import {Switch, Redirect, Route} from "react-router-dom";
-import {Header} from "./Header";
+import { Animal } from "./Animal";
+import { Switch, Redirect, Route } from "react-router-dom";
+import { Header } from "./Header";
 import Footer from "./Footer";
 import { Login } from './Login';
+import { LinearProgress } from '@material-ui/core';
 
 const sections = [
-    {title: 'Dashboard', url: '/dashboard'}
+    { title: 'Dashboard', url: '/dashboard' }
 ];
 
 export function Main() {
     const dispatch = useDispatch();
+    const isLoading = useSelector(state => state.users.isLoading);
 
     return (
         <React.Fragment>
-            <CssBaseline/>
+            <CssBaseline />
+            {isLoading && <LinearProgress color="secondary" />}
             <Container maxWidth="lg">
-                <Header title="Animal Haven" sections={sections}/>
+                <Header title="Animal Haven" sections={sections} />
                 <main>
                     <Switch location={dispatch.location}>
-                        <Route exact path='/dashboard' component={Animal}/>
-                        <Route exact path='/login' component={Login}/>
-                        <Redirect to="/dashboard"/>
+                        <Route exact path='/dashboard' component={Animal} />
+                        <Route exact path='/login' component={Login} />
+                        <Redirect to="/dashboard" />
                     </Switch>
                 </main>
-                <Footer/>
+                <Footer />
             </Container>
         </React.Fragment>
     );
