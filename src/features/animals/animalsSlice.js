@@ -1,14 +1,10 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import {baseUrl} from "../../shared/baseUrl";
+import { baseUrl } from "../../shared/baseUrl";
 
 export const fetchAllAnimals = createAsyncThunk(
     'animals/fetchAllAnimals',
-    async (animalId, {getState, requestId}) => {
-        const {currentRequestId, loading} = getState().animals
-        if (loading !== 'pending' || requestId !== currentRequestId) {
-            return
-        }
+    async (animalId, { getState, requestId }) => {
         const response = await axios.get(baseUrl + '/animals',
             {
                 headers: {
@@ -18,8 +14,8 @@ export const fetchAllAnimals = createAsyncThunk(
         return response.data;
     },
     {
-        condition: (animalId, {getState, extra}) => {
-            const {animals} = getState()
+        condition: (animalId, { getState, extra }) => {
+            const { animals } = getState()
             const fetchStatus = animals
             if (fetchStatus === 'fulfilled' || fetchStatus === 'loading') {
                 // Already fetched or in progress, don't need to re-fetch
@@ -28,6 +24,31 @@ export const fetchAllAnimals = createAsyncThunk(
         }
     }
 )
+
+export const addAnimal = createAsyncThunk(
+    'animals/addAnimal',
+    async (animal, { getState, requestId }) => {
+        const response = await axios.post(baseUrl + '/animals',
+            animal,
+            {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+        return response.data;
+    },
+    {
+        condition: (animalId, { getState, extra }) => {
+            const { status } = getState()
+            const fetchStatus = status
+            if (fetchStatus === 'fulfilled' || fetchStatus === 'loading') {
+                // Already fetched or in progress, don't need to re-fetch
+                return false
+            }
+        }
+    }
+)
+
 
 export const animalsSlice = createSlice({
     name: 'animals',
@@ -48,13 +69,23 @@ export const animalsSlice = createSlice({
         },
         [fetchAllAnimals.fulfilled]: (state, action) => {
             // Add animals to the state array
-            const {requestId} = action.meta
-            if (state.loading === 'pending' && state.currentRequestId === requestId) {
-                state.loading = 'idle'
-                state.animals = action.payload
-                state.currentRequestId = undefined
+            state.loading = 'idle'
+            state.animals = action.payload
+            state.currentRequestId = undefined
+        },
+        [addAnimal.pending]: (state, action) => {
+            if (state.loading === 'idle') {
+                state.loading = 'pending'
+                state.currentRequestId = action.meta.requestId
             }
-        }
+        },
+        [addAnimal.fulfilled]: (state, action) => {
+            // Add animals to the state array
+                state.loading = 'idle'
+                state.animals.unshift(action.payload)
+                state.currentRequestId = undefined
+        },
+
     }
 });
 
