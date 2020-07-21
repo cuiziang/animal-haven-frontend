@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Modal, FormControl, FormLabel, TextField, Button, RadioGroup, Radio, FormControlLabel, makeStyles } from '@material-ui/core';
 import { useFormik } from 'formik';
 import SaveIcon from '@material-ui/icons/Save';
+import ClearAllIcon from '@material-ui/icons/ClearAll';
 import { useDispatch } from 'react-redux';
 import { addAnimal } from '../features/animals/animalsSlice';
+import * as yup from 'yup';
 
 function rand() {
     return Math.round(Math.random() * 20) - 10;
@@ -55,7 +57,15 @@ export function AddAnimal(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-
+    const validationSchema = yup.object({
+        name: yup.date().required("Required"),
+        sex: yup.string().required("Required"),
+        alteration: yup.string().required("Required"),
+        description: yup.string().required("Required"),
+        surrenderedByAnimalControl: yup.string().required("Required"),
+        surrenderReason: yup.string().required("Required"),
+        microchipId: yup.string().required("Required"),
+    })
 
     const formik = useFormik({
         initialValues: {
@@ -63,9 +73,9 @@ export function AddAnimal(props) {
             sex: '',
             alteration: '',
             description: '',
-            birthDate: '1970-01-01',
+            birthDate: '2000-01-01',
             surrenderedByAnimalControl: '',
-            surrenderDate: '1970-01-01',
+            surrenderDate: '2000-01-01',
             surrenderReason: '',
             microchipId: ''
         },
@@ -73,7 +83,8 @@ export function AddAnimal(props) {
             props.setOpen(false);
             dispatch(addAnimal(values));
             formik.resetForm();
-        }
+        },
+        validationSchema
     });
 
     const handleClose = () => {
@@ -100,6 +111,9 @@ export function AddAnimal(props) {
                             id="name"
                             type="text"
                             autoComplete="off"
+                            onBlur={formik.handleBlur}
+                            error={Boolean(formik.errors.name) && formik.touched.name}
+                            helperText={Boolean(formik.errors.name) && formik.touched.name ? formik.errors.name : ""}
                             onChange={formik.handleChange}
                             value={formik.values.name}
                         />
@@ -168,6 +182,9 @@ export function AddAnimal(props) {
                             multiline
                             rows={4}
                             variant="outlined"
+                            onBlur={formik.handleBlur}
+                            error={Boolean(formik.errors.description) && formik.touched.description}
+                            helperText={Boolean(formik.errors.description) && formik.touched.description ? formik.errors.description : ""}
                             onChange={formik.handleChange}
                             value={formik.values.description}
                         />
@@ -201,6 +218,9 @@ export function AddAnimal(props) {
                             multiline
                             rows={4}
                             variant="outlined"
+                            onBlur={formik.handleBlur}
+                            error={Boolean(formik.errors.surrenderReason) && formik.touched.surrenderReason}
+                            helperText={Boolean(formik.errors.surrenderReason) && formik.touched.surrenderReason ? formik.errors.surrenderReason : ""}
                             onChange={formik.handleChange}
                             value={formik.values.surrenderReason}
                         />
@@ -224,6 +244,9 @@ export function AddAnimal(props) {
                             id="microchipId"
                             type="text"
                             autoComplete="off"
+                            onBlur={formik.handleBlur}
+                            error={Boolean(formik.errors.microchipId) && formik.touched.microchipId}
+                            helperText={Boolean(formik.errors.microchipId) && formik.touched.microchipId ? formik.errors.microchipId : ""}
                             onChange={formik.handleChange}
                             value={formik.values.microchipId}
                         />
@@ -233,7 +256,7 @@ export function AddAnimal(props) {
                         variant="contained"
                         type="button"
                         className={classes.button}
-                        startIcon={<SaveIcon />}
+                        startIcon={< ClearAllIcon />}
                     >
                         Reset
                                 </Button>
