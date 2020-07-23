@@ -8,9 +8,11 @@ import { Header } from "./Header";
 import Footer from "./Footer";
 import { Login } from './Login';
 import { LinearProgress } from '@material-ui/core';
+import { Dashboard } from './Dashboard';
 
 const sections = [
-    { title: 'Dashboard', url: '/dashboard' }
+    { title: 'Dashboard', url: '/dashboard' },
+    { title: 'Animal', url: '/animals' }
 ];
 
 export function Main() {
@@ -25,7 +27,8 @@ export function Main() {
                 <Header title="Animal Haven" sections={sections} />
                 <main>
                     <Switch location={dispatch.location}>
-                        <Route exact path='/dashboard' component={Animal} />
+                        <Route exact path='/dashboard' component={Dashboard} />
+                        <Route exact path='/animals' component={Animal} />
                         <Route exact path='/login' component={Login} />
                         <Redirect to="/dashboard" />
                     </Switch>
