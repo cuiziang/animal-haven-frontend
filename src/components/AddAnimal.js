@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Modal, FormControl, FormLabel, TextField, Button, RadioGroup, Radio, FormControlLabel, makeStyles } from '@material-ui/core';
+import { Modal, FormControl, FormLabel, TextField, Button, RadioGroup, Radio, FormControlLabel, makeStyles, Select, MenuItem } from '@material-ui/core';
 import { useFormik } from 'formik';
 import SaveIcon from '@material-ui/icons/Save';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addAnimal } from '../features/animals/animalsSlice';
 import * as yup from 'yup';
 
@@ -57,9 +57,13 @@ export function AddAnimal(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
 
+    const animalsNameAndCount = useSelector(state => state.animals.animalsNameAndCountGroupByName)
+
+
     const validationSchema = yup.object({
         name: yup.string().required("Required"),
         sex: yup.string().required("Required"),
+        species: yup.string().required("Required"),
         alteration: yup.string().required("Required"),
         description: yup.string().required("Required"),
         surrenderedByAnimalControl: yup.string().required("Required"),
@@ -71,6 +75,7 @@ export function AddAnimal(props) {
         initialValues: {
             name: '',
             sex: '',
+            species: '',
             alteration: '',
             description: '',
             birthDate: '2000-01-01',
@@ -118,6 +123,22 @@ export function AddAnimal(props) {
                             value={formik.values.name}
                         />
                     </FormControl>
+                    <FormControl component="fieldset">
+                        <FormLabel id="species">Species</FormLabel>
+                        <Select
+                            labelId="species"
+                            id="species"
+                            name="species"
+                            error={Boolean(formik.errors.species) && formik.touched.species}
+                            onChange={formik.handleChange}
+                            value={formik.values.species}
+                        >
+                            {animalsNameAndCount.filter((animal) => animal.count < animal.space).map((animal) => (
+                                <MenuItem key={animal.name} value={animal.name}>{animal.name}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <br />
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Gender</FormLabel>
                         <RadioGroup
@@ -246,7 +267,6 @@ export function AddAnimal(props) {
                             autoComplete="off"
                             onBlur={formik.handleBlur}
                             error={Boolean(formik.errors.microchipId) && formik.touched.microchipId}
-                            helperText={Boolean(formik.errors.microchipId) && formik.touched.microchipId ? formik.errors.microchipId : ""}
                             onChange={formik.handleChange}
                             value={formik.values.microchipId}
                         />
