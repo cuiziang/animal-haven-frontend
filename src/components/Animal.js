@@ -19,7 +19,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllAnimals } from "../features/animals/animalsSlice";
+import { fetchAllAnimals, animalsNameAndCountGroupByName } from "../features/animals/animalsSlice";
 import { Button, ButtonGroup } from '@material-ui/core';
 import { AddAnimal } from './AddAnimal'
 
@@ -211,8 +211,10 @@ export function Animal() {
     const dispatch = useDispatch()
     const loggedIn = useSelector(state => state.users.loggedIn);
     const animals = useSelector(state => state.animals.animals);
+    const animalsNameAndCount = useSelector(state => state.animals.animalsNameAndCountGroupByName)
 
     useEffect(() => {
+        dispatch(animalsNameAndCountGroupByName());
         dispatch(fetchAllAnimals());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -355,16 +357,21 @@ export function Animal() {
                         onChangePage={handleChangePage}
                         onChangeRowsPerPage={handleChangeRowsPerPage}
                     />
-                    <ButtonGroup>
-                        <Button
-                            className={classes.button}
-                            onClick={handleOpen}
-                            variant="contained"
-                            color="primary"
-                        >
-                            Add Animal
-                        </Button>
-                    </ButtonGroup>
+                    {
+                        animalsNameAndCount.filter((animal) => animal.space > animal.count).length > 0 ?
+                            <ButtonGroup>
+                                <Button
+                                    className={classes.button}
+                                    onClick={handleOpen}
+                                    variant="contained"
+                                    color="primary"
+                                >
+                                    Add Animal
+                                        </Button>
+                            </ButtonGroup>
+                            :
+                            <div />
+                    }
                 </Paper>
                 <AddAnimal open={open} setOpen={setOpen} />
             </div>

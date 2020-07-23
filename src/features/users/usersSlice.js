@@ -51,6 +51,7 @@ export const usersSlice = createSlice({
             var decoded = JwtDecode(token);
             state.username = decoded.sub;
             state.roles = decoded.roles;
+            console.log(decoded.email);
             state.emailHash = md5(action.payload.email)
             const cookies = new Cookies();
             cookies.set('token', action.payload.jwt);
