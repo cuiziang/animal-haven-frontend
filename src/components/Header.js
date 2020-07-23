@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
-import {useDispatch, useSelector} from 'react-redux';
-import {logout} from '../features/users/usersSlice';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../features/users/usersSlice';
+import { useHistory } from 'react-router-dom';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { Menu, MenuItem, IconButton, Link } from '@material-ui/core';
+import Avatar from 'react-avatar';
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
         flex: 1,
     },
     toolbarSecondary: {
-        justifyContent: 'space-between',
+        justifyContent: 'start',
         overflowX: 'auto',
     },
     toolbarLink: {
@@ -26,14 +27,31 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
 export function Header(props) {
     const classes = useStyles();
-    const {sections, title} = props;
+    const { sections, title } = props;
 
     const loggedIn = useSelector(state => state.users.loggedIn);
+    const emailHash = useSelector(state => state.users.emailHash);
+    const history = useHistory();
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = (to) => {
+        history.push(to)
+        setAnchorEl(null);
+    };
+
+
     const dispatch = useDispatch();
-    const toLogout = () => dispatch(logout());
+    const toLogout = () => {
+        dispatch(logout())
+        setAnchorEl(null);
+    };
 
     return (
         <React.Fragment>
@@ -48,23 +66,79 @@ export function Header(props) {
                 >
                     {title}
                 </Typography>
-                {loggedIn ? <Button onClick={toLogout} variant="outlined" size="medium">Logout</Button> :
-                    <Button href="login" variant="outlined" size="medium">Login</Button>}
+                {loggedIn ?
+                    <div>
+                        <IconButton
+                            aria-label="more"
+                            aria-controls="long-menu"
+                            aria-haspopup="true"
+                            onClick={handleClick}
+                        >
+                            <Avatar size="35" round={true} g src={'https://www.gravatar.com/avatar/' + emailHash} />
+                        </IconButton>
+                        <Menu
+                            id="long-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            PaperProps={{
+                                style: {
+                                    maxHeight: 48 * 4.5,
+                                    width: '20ch',
+                                },
+                            }}
+                        >
+                            <MenuItem onClick={toLogout}>
+                                Logout
+                            </MenuItem>
+                        </Menu>
+                    </div>
+                    :
+                    <div>
+                        <IconButton
+                            aria-label="more"
+                            aria-controls="long-menu"
+                            aria-haspopup="true"
+                            onClick={handleClick}
+                        >
+                            <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                            id="long-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            PaperProps={{
+                                style: {
+                                    maxHeight: 48 * 4.5,
+                                    width: '20ch',
+                                },
+                            }}
+                        >
+                            <MenuItem onClick={() => handleClose("/login")}>
+                                Login
+                                </MenuItem>
+                        </Menu>
+                    </div>
+                }
             </Toolbar>
-            <Toolbar component="nav" variant="dense" className={classes.toolbarSecondary}>
-                {sections.map((section) => (
-                    <Link
-                        color="inherit"
-                        noWrap
-                        key={section.title}
-                        variant="body2"
-                        href={section.url}
-                        className={classes.toolbarLink}
-                    >
-                        {section.title}
-                    </Link>
-                ))}
-            </Toolbar>
+            {loggedIn ?
+                <Toolbar component="nav" variant="dense" className={classes.toolbarSecondary}>
+                    {sections.map((section) => (
+                        <Link
+                            color="inherit"
+                            noWrap
+                            key={section.title}
+                            variant="body2"
+                            href="#"
+                            onClick={() => history.push(section.url)}
+                            className={classes.toolbarLink}
+                        >
+                            {section.title}
+                        </Link>
+                    ))}
+                </Toolbar> :
+                <></>}
         </React.Fragment>
     );
 }

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import MuiAlert from '@material-ui/lab/Alert';
+import { Alert } from '@material-ui/lab';
+import ErrorIcon from '@material-ui/icons/Error';
 import Container from '@material-ui/core/Container';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from "../features/users/usersSlice";
@@ -12,8 +13,8 @@ export function Login() {
 
     const loggedIn = useSelector(state => state.users.loggedIn);
     const isLoading = useSelector(state => state.users.isLoading);
+    const error = useSelector(state => state.users.error);
     const [tried, setTried] = useState();
-    const [warning, setWarning] = useState();
     const [showHideAlert, setShowHideAlert] = useState();
     const [username, setUsername] = useState(false);
     const [password, setPassword] = useState();
@@ -23,16 +24,13 @@ export function Login() {
     const dispatch = useDispatch()
     const { from } = location.state || { from: { pathname: "/" } }
 
-    const Alert = props => <MuiAlert elevation={6} variant="filled" {...props} />;
-
     useEffect(() => {
         if (loggedIn)
             history.push(from);
         else if (tried && !isLoading) {
             setShowHideAlert(true);
-            setWarning("Wrong username or password");
         }
-    }, [loggedIn, history, from, tried, isLoading]);
+    }, [loggedIn, history, from, tried, isLoading, error]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -48,7 +46,11 @@ export function Login() {
 
     return (
         <Container maxWidth="sm">
-            {showHideAlert && <Alert severity="error">{warning}</Alert>}
+            {showHideAlert &&
+                <Alert icon={<ErrorIcon fontSize="inherit" />} severity="error">
+                    {error.message}
+                </Alert>
+            }
             <form onSubmit={handleSubmit}>
                 <TextField type="text" label="Username" fullWidth margin="normal" name="username"
                     onChange={handleUsernameChange} />

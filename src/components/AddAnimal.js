@@ -58,7 +58,7 @@ export function AddAnimal(props) {
     const dispatch = useDispatch();
 
     const validationSchema = yup.object({
-        name: yup.date().required("Required"),
+        name: yup.string().required("Required"),
         sex: yup.string().required("Required"),
         alteration: yup.string().required("Required"),
         description: yup.string().required("Required"),
@@ -253,6 +253,7 @@ export function AddAnimal(props) {
                     </FormControl>
                     <Button
                         onClick={formik.resetForm}
+                        color="secondary"
                         variant="contained"
                         type="button"
                         className={classes.button}
@@ -261,6 +262,7 @@ export function AddAnimal(props) {
                         Reset
                                 </Button>
                     <Button
+                        disabled={!formik.isValid}
                         variant="contained"
                         color="primary"
                         type="submit"

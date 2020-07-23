@@ -1,14 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { baseUrl } from "../../shared/baseUrl";
+import Cookies from 'universal-cookie';
 
 export const fetchAllAnimals = createAsyncThunk(
     'animals/fetchAllAnimals',
     async (animalId, { getState, requestId }) => {
+        const cookies = new Cookies();
         const response = await axios.get(baseUrl + '/animals',
             {
                 headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                    Authorization: 'Bearer ' + cookies.get('token')
                 }
             });
         return response.data;
@@ -28,11 +30,12 @@ export const fetchAllAnimals = createAsyncThunk(
 export const addAnimal = createAsyncThunk(
     'animals/addAnimal',
     async (animal, { getState, requestId }) => {
+        const cookies = new Cookies();
         const response = await axios.post(baseUrl + '/animals',
             animal,
             {
                 headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                    Authorization: 'Bearer ' + cookies.get('token')
                 }
             });
         return response.data;
@@ -81,9 +84,9 @@ export const animalsSlice = createSlice({
         },
         [addAnimal.fulfilled]: (state, action) => {
             // Add animals to the state array
-                state.loading = 'idle'
-                state.animals.unshift(action.payload)
-                state.currentRequestId = undefined
+            state.loading = 'idle'
+            state.animals.unshift(action.payload)
+            state.currentRequestId = undefined
         },
 
     }
