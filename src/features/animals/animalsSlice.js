@@ -5,31 +5,27 @@ import Cookies from 'universal-cookie';
 
 export const fetchAllAnimals = createAsyncThunk(
     'animals/fetchAllAnimals',
-    async (animalId, { getState, requestId }) => {
+    async (query) => {
         const cookies = new Cookies();
-        const response = await axios.get(baseUrl + '/animals',
+
+        const url = new URL(baseUrl + '/animals');
+        url.searchParams.append('page', query.page);
+        url.searchParams.append('size', query.pageSize);
+
+        const response = await axios.get(url,
             {
                 headers: {
                     Authorization: 'Bearer ' + cookies.get('token')
                 }
             });
+            
         return response.data;
-    },
-    {
-        condition: (animalId, { getState, extra }) => {
-            const { animals } = getState()
-            const fetchStatus = animals
-            if (fetchStatus === 'fulfilled' || fetchStatus === 'loading') {
-                // Already fetched or in progress, don't need to re-fetch
-                return false
-            }
-        }
     }
 )
 
 export const addAnimal = createAsyncThunk(
     'animals/addAnimal',
-    async (animal, { getState, requestId }) => {
+    async (animal) => {
         const cookies = new Cookies();
         const response = await axios.post(baseUrl + '/animals',
             animal,
@@ -39,22 +35,12 @@ export const addAnimal = createAsyncThunk(
                 }
             });
         return response.data;
-    },
-    {
-        condition: (animalId, { getState, extra }) => {
-            const { status } = getState()
-            const fetchStatus = status
-            if (fetchStatus === 'fulfilled' || fetchStatus === 'loading') {
-                // Already fetched or in progress, don't need to re-fetch
-                return false
-            }
-        }
     }
 )
 
 export const animalsNameAndCountGroupByName = createAsyncThunk(
     'animals/animalsNameAndCountGroupByName',
-    async (animal, { getState, requestId }) => {
+    async () => {
         const cookies = new Cookies();
         const response = await axios.get(baseUrl + '/animals/animalsNameAndCountGroupByName',
             {
@@ -63,16 +49,20 @@ export const animalsNameAndCountGroupByName = createAsyncThunk(
                 }
             });
         return response.data;
-    },
-    {
-        condition: (animalId, { getState, extra }) => {
-            const { status } = getState()
-            const fetchStatus = status
-            if (fetchStatus === 'fulfilled' || fetchStatus === 'loading') {
-                // Already fetched or in progress, don't need to re-fetch
-                return false
-            }
-        }
+    }
+)
+
+export const breedNames = createAsyncThunk(
+    'animals/breedNames',
+    async (speciesId, { getState, requestId }) => {
+        const cookies = new Cookies();
+        const response = await axios.get(baseUrl + '/breeds',
+            {
+                headers: {
+                    Authorization: 'Bearer ' + cookies.get('token')
+                }
+            });
+        return response.data;
     }
 )
 
@@ -83,12 +73,16 @@ export const animalsSlice = createSlice({
         loading: 'idle',
         currentRequestId: undefined,
         error: null,
-        animals: [],
-        animalsNameAndCountGroupByName: {}
+        animals: {
+            animals: [],
+            page: 0,
+            totalCount: 0
+        },
+        animalsNameAndCountGroupByName: {},
+        breedNames: {}
     },
     reducers: {},
     extraReducers: {
-        // Add reducers for additional action types here, and handle loading state as needed
         [fetchAllAnimals.pending]: (state, action) => {
             if (state.loading === 'idle') {
                 state.loading = 'pending'
@@ -96,9 +90,10 @@ export const animalsSlice = createSlice({
             }
         },
         [fetchAllAnimals.fulfilled]: (state, action) => {
-            // Add animals to the state array
-            state.loading = 'idle'
-            state.animals = action.payload
+            state.loading = 'idle';
+            state.animals.animals = action.payload.animals;
+            state.animals.page = action.payload.page;
+            state.animals.totalCount = action.payload.totalCount;
             state.currentRequestId = undefined
         },
         [addAnimal.pending]: (state, action) => {
@@ -119,10 +114,8 @@ export const animalsSlice = createSlice({
             }
         },
         [animalsNameAndCountGroupByName.fulfilled]: (state, action) => {
-            // Add animals to the state array
             state.loading = 'idle'
             state.currentRequestId = undefined
-            console.log(action.payload);
             state.animalsNameAndCountGroupByName = action.payload
         },
 
