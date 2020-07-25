@@ -26,7 +26,7 @@ export default function AvailableSpace() {
     useEffect(() => {
         dispatch(animalsNameAndCountGroupByName());
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch]);
 
     return (
         <Container fixed>

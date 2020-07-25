@@ -56,18 +56,16 @@ const tableIcons = {
     SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
     ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
-  };
+};
 
 export function Animal() {
-    const dispatch = useDispatch()
-    const loggedIn = useSelector(state => state.users.loggedIn);
-    const animals = useSelector(state => state.animals.animals);
-    const animalsNameAndCount = useSelector(state => state.animals.animalsNameAndCountGroupByName)
+    const tableRef = React.createRef();
 
-    useEffect(() => {
-        dispatch(animalsNameAndCountGroupByName());
-        dispatch(fetchAllAnimals());
-    }, [dispatch]);
+    let dispatch = useDispatch()
+    const loggedIn = useSelector(state => state.users.loggedIn);
+    //No used, check material-table
+    // const animals = useSelector(state => state.animals.animals);
+    const animalsNameAndCount = useSelector(state => state.animals.animalsNameAndCountGroupByName)
 
     const classes = useStyles();
     const [open, setOpen] = useState(false);
@@ -76,9 +74,34 @@ export function Animal() {
         setOpen(true);
     };
 
+    useEffect(() => {
+        dispatch(animalsNameAndCountGroupByName());
+        dispatch(fetchAllAnimals());
+        if (open === false) {
+            tableRef.current.onQueryChange();
+        }
+    }, [dispatch, open]);
+
+
     // function capitalizeFirstLetter(string) {
     //     return string.charAt(0).toUpperCase() + string.slice(1);
     // }
+
+    const getData = query => {
+        return new Promise((resolve, reject) => {
+            Promise.resolve(dispatch(fetchAllAnimals(query))
+                .then((data) => {
+                    const TableData = data.payload.animals.map(r => ({ ...r }))
+                    const totalCount = data.payload.totalCount;
+
+                    resolve({
+                        data: TableData,
+                        page: query.page,
+                        totalCount,
+                    });
+                }))
+        });
+    };
 
     if (loggedIn)
         return (
@@ -101,6 +124,7 @@ export function Animal() {
                 }
                 <Paper className={classes.paper}>
                     <MaterialTable
+                        tableRef={tableRef}
                         icons={tableIcons}
                         title="Animals"
                         columns={[
@@ -109,17 +133,7 @@ export function Animal() {
                             { title: 'Birth Date', field: 'birthDate' },
                             { title: 'Alteration', field: 'alterationStatus' },
                         ]}
-                        data={async query => {
-                            await dispatch(fetchAllAnimals(query));
-                            return (
-                                {
-                                    data: animals.animals.map(r => ({ ...r })),
-                                    page: query.page,
-                                    totalCount: animals.totalCount
-                                }
-                            )
-                        }
-                        }
+                        data={getData}
                         options={{
                             sorting: true,
                             exportButton: true,
