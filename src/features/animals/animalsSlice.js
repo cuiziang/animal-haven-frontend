@@ -11,6 +11,10 @@ export const fetchAllAnimals = createAsyncThunk(
         const url = new URL(baseUrl + '/animals');
         url.searchParams.append('page', query.page);
         url.searchParams.append('size', query.pageSize);
+        if (query.orderBy !== undefined) {
+            url.searchParams.append('sort', query.orderBy.field);
+            url.searchParams.append('dir', query.orderDirection);
+        }
 
         const response = await axios.get(url,
             {
