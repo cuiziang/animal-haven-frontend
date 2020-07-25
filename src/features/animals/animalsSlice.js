@@ -103,9 +103,7 @@ export const animalsSlice = createSlice({
             }
         },
         [addAnimal.fulfilled]: (state, action) => {
-            // Add animals to the state array
             state.loading = 'idle'
-            state.animals.unshift(action.payload)
             state.currentRequestId = undefined
         },
         [animalsNameAndCountGroupByName.pending]: (state, action) => {
